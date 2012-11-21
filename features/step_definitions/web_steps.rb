@@ -36,23 +36,68 @@ Given /^the blog is set up$/ do
                                    :base_url => 'http://localhost:3000'});
   Blog.default.save!
   User.create!({:login => 'admin',
-                :password => 'aaaaaaaa',
+                :password => 'admin123',
                 :email => 'joe@snow.com',
                 :profile_id => 1,
                 :name => 'admin',
                 :state => 'active'})
+  User.create!({:login => 'user',
+                :password => 'user123',
+                :email => 'user@example.com',
+                :profile_id => 2,
+                :name => 'non-admin1',
+                :state => 'active'})
+  User.create!({:login => 'user2',
+                :password => 'user123',
+                :email => 'user2@example.com',
+                :profile_id => 2,
+                :name => 'non-admin2',
+                :state => 'active'})
+end
+
+Given /^I am the author of the article "([^"]*)" with body "([^"]*)"$/ do |title, body|
+  user = User.find_by_login('user')
+  Article.create!({:title => title, :body => body, :user_id => user.id, :published => true})
+end
+
+And /^(.*) is the author of the article with title "([^"]*)" and body "([^"]*)"$/ do |user, title, body|
+  user = User.find_by_login(user)
+  Article.create!({:title => title, :body => body, :user_id => user.id, :published => true})
 end
 
 And /^I am logged into the admin panel$/ do
   visit '/accounts/login'
   fill_in 'user_login', :with => 'admin'
-  fill_in 'user_password', :with => 'aaaaaaaa'
+  fill_in 'user_password', :with => 'admin123'
   click_button 'Login'
   if page.respond_to? :should
     page.should have_content('Login successful')
   else
     assert page.has_content?('Login successful')
   end
+end
+
+
+And /^I am logged-in as (non-)?admin user$/ do |non_admin|
+  if non_admin != nil
+    login = 'user'
+    pwd = 'user123'
+    admin = false
+  else 
+    login = 'admin'
+    pwd = 'admin123'
+    admin = true
+  end 
+  visit '/accounts/login'
+  fill_in 'user_login', :with => login
+  fill_in 'user_password', :with => pwd
+  click_button 'Login'
+  if page.respond_to? :should
+    page.should have_content('Login successful')
+  else
+    assert page.has_content?('Login successful')
+  end
+  assert (User.find_by_login(login).admin? == admin) 
 end
 
 # Single-line step scoper

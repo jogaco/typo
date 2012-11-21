@@ -4,3 +4,13 @@
   <%= render :partial => "form" %>
 
 <% end %>
+
+<% if current_user.admin? -%>
+  <div class='separator'>
+    <h4><%= _("Merge With This Article") %></h4>
+    <div class=''>
+      <label for="merge_with">Article ID</label>
+      <input id="merge_with" name="merge_with" size="5" type="text" />
+    </div>
+  </div>
+<% end -%>      
