@@ -5,12 +5,17 @@ Feature: As an admin I want to merge two articles
   
   Background:
     Given the blog is set up
-    And I am logged-in as admin user
     And user is the author of the article with title "user1_title" and body "Lorem Ipsum"
     And user2 is the author of the article with title "user2_title" and body "Hello World"
 
+  Scenario: A non-admin cannot merge two articles
+    Given I am logged-in as non-admin user
+    And I am on the edit page of the article "user1_title"
+    Then I should not see "Merge With This Article"
+
   Scenario: Admin can merge two blog articles
-    Given I am on the edit page of the article "user1_title"
+    Given I am logged-in as admin user
+    And I am on the edit page of the article "user1_title"
     Then I should see "Merge With This Article"
 
 #  Scenario: When articles are merged, the merged article should contain the text of both previous articles
