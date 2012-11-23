@@ -27,6 +27,19 @@ class Admin::ContentController < Admin::BaseController
     new_or_edit
   end
 
+  def merge
+    @article = Article.find(params[:id])
+    other = @article.merge_with(params[:merge_with])
+    if other
+       redirect_to :action => 'edit', :id => @article.id
+      flash[:notice] = 'Current article successfully merged with article id ' + params[:merge_with]
+    else
+      flash[:error] = 'Could not merge current article with article id ' + params[:merge_with]
+    end
+
+  end
+
+
   def edit
     @article = Article.find(params[:id])
     unless @article.access_by? current_user

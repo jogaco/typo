@@ -630,5 +630,36 @@ describe Article do
     end
 
   end
+  
+  describe "merging two articles" do
+    before do
+      @article_1 = Article.create!(:id => 1, :title => 'title1', :body => '123')
+      @article_2 = Article.create!(:id => 2, :title => 'title2', :body => 'abc')
+      @article_1.stub(:comments).and_return([])
+      @article_2.stub(:comments).and_return([@comment_2])
+      Article.stub(:find_by_id).and_return(@article_2)
+    end
+
+    it 'should merge two bodies' do
+      @article_2.stub(:comments).and_return([])
+      @article_1.merge_with(@article_2.id)
+      @article_1.body.should be == '123' + 'abc'
+    end
+    
+    it 'Comments on each of the two original articles need to all carry over and point to the new, merged article' do
+      @comment_2 = mock_model(Comment, :id => 2, :body => 'comment 2', :comments_closed? => false)
+      comment_1 = mock_model(Comment, :id => 1, :body => 'comment 1', :comments_closed? => false)
+      comments_1 = [comment_1]
+      @article_1.stub(:comments).and_return(comments_1) 
+      @article_1.merge_with(@article_2.id)
+    end
+
+    it 'should delete the merged article' do
+      @article_2.stub(:comments).and_return([])
+      @article_2.should_receive(:destroy)
+      @article_1.merge_with(@article_2.id)
+      @article_1.body.should be == '123' + 'abc'
+    end
+  end
 end
 

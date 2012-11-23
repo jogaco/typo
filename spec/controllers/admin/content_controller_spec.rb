@@ -671,4 +671,5 @@ describe Admin::ContentController do
 
     end
   end
+
 end

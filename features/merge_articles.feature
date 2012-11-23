@@ -18,7 +18,10 @@ Feature: As an admin I want to merge two articles
     And I am on the edit page of the article "user1_title"
     Then I should see "Merge With This Article"
 
-#  Scenario: When articles are merged, the merged article should contain the text of both previous articles
-#    Given I am on the edit page of the article "user1_title"
-#    And I fill in "merge_with" with the id of the article "user2_title"
-#    And I press "Merge" 
+  Scenario: When articles are merged, the merged article should contain the text of both previous articles
+    Given I am logged-in as admin user
+    And I am on the edit page of the article "user1_title"
+    And I fill in "merge_with" with the id of article "user2_title"
+    And I press "Merge"
+    Then I should see the text of article "user1_title"
+    And I should see the text of article "user2_title" 
