@@ -13,6 +13,12 @@ Feature: As an admin I want to merge two articles
     And I am on the edit page of the article "user1_title"
     Then I should not see "Merge With This Article"
 
+  Scenario: A non-admin cannot post a merge for two articles
+    Given I am logged-in as non-admin user
+    And I post a merge of the articles "user1_title" and "user2_title"
+    Then show me the page
+    Then my current page should be the index page
+
   Scenario: Admin can merge two blog articles
     Given I am logged-in as admin user
     And I am on the edit page of the article "user1_title"

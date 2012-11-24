@@ -109,6 +109,12 @@ And /^I am logged-in as (non-)?admin user$/ do |non_admin|
   assert (User.find_by_login(login).admin? == admin)
 end
 
+And /^I post a merge of the articles "([^"]*)" and "([^"]*)"$/ do |art1, art2|
+  article_1 = Article.find_by_title(art1)
+  article_2 = Article.find_by_title(art2)
+  page.driver.post '/admin/content/merge', { :id => article_1.id, :merge_with => article_2.id } 
+end
+
 # Single-line step scoper
 When /^(.*) within (.*[^:])$/ do |step, parent|
   with_scope(parent) { When step }
@@ -308,6 +314,11 @@ Then /^the "([^"]*)" checkbox(?: within (.*))? should not be checked$/ do |label
       assert !field_checked
     end
   end
+end
+
+Then /^my current page should be the index page$/ do
+  current_path = URI.parse(current_url).path
+  assert_equal current_path, 'index'
 end
  
 Then /^(?:|I )should be on (.+)$/ do |page_name|
