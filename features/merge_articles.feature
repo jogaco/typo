@@ -11,18 +11,18 @@ Feature: As an admin I want to merge two articles
   Scenario: A non-admin cannot merge two articles
     Given I am logged-in as non-admin user
     And I am on the edit page of the article "user1_title"
-    Then I should not see "Merge With This Article"
+    Then I should not see "Merge Articles"
 
   Scenario: A non-admin cannot post a merge for two articles
     Given I am logged-in as non-admin user
     And I post a merge of the articles "user1_title" and "user2_title"
     Then show me the page
-    Then my current page should be the index page
+    Then I should see "Error, you are not allowed to perform this action"
 
   Scenario: Admin can merge two blog articles
     Given I am logged-in as admin user
     And I am on the edit page of the article "user1_title"
-    Then I should see "Merge With This Article"
+    Then I should see "Merge Articles"
 
   Scenario: When articles are merged, the merged article should contain the text of both previous articles
     Given I am logged-in as admin user
