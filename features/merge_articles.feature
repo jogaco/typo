@@ -23,5 +23,5 @@ Feature: As an admin I want to merge two articles
     And I am on the edit page of the article "user1_title"
     And I fill in "merge_with" with the id of article "user2_title"
     And I press "Merge"
-    Then I should see the text of article "user1_title"
-    And I should see the text of article "user2_title" 
+    Then I should see "Lorem Ipsum"
+    And I should see "Hello World"  

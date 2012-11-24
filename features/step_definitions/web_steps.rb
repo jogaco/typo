@@ -60,6 +60,15 @@ Given /^I am the author of the article "([^"]*)" with body "([^"]*)"$/ do |title
   Article.create!({:title => title, :body => body, :user_id => user.id, :published => true})
 end
 
+Then /^I should see the text of article "([^"]*)"$/ do |title|
+  article = Article.find_by_title(title)
+  if page.respond_to? :should
+    page.should have_content(article.body)
+  else
+    assert page.has_content?(article.body)
+  end
+end
+
 And /^(.*) is the author of the article with title "([^"]*)" and body "([^"]*)"$/ do |user, title, body|
   user = User.find_by_login(user)
   Article.create!({:title => title, :body => body, :user_id => user.id, :published => true})
@@ -97,7 +106,7 @@ And /^I am logged-in as (non-)?admin user$/ do |non_admin|
   else
     assert page.has_content?('Login successful')
   end
-  assert (User.find_by_login(login).admin? == admin) 
+  assert (User.find_by_login(login).admin? == admin)
 end
 
 # Single-line step scoper

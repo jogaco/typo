@@ -3,8 +3,19 @@ require 'base64'
 module Admin; end
 class Admin::ContentController < Admin::BaseController
   layout "administration", :except => [:show, :autosave]
-
   cache_sweeper :blog_sweeper
+  before_filter :check_authorization, :only => :merge
+
+private
+  def check_authorization
+    unless current_user.admin?
+      redirect_to :action => 'index'
+      flash[:error] = _("Error, you are not allowed to perform this action")
+      return
+    end
+  end
+
+public
 
   def auto_complete_for_article_keywords
     @items = Tag.find_with_char params[:article][:keywords].strip
@@ -28,15 +39,19 @@ class Admin::ContentController < Admin::BaseController
   end
 
   def merge
-    @article = Article.find(params[:id])
-    other = @article.merge_with(params[:merge_with])
-    if other
-       redirect_to :action => 'edit', :id => @article.id
-      flash[:notice] = 'Current article successfully merged with article id ' + params[:merge_with]
+    @article = Article.find_by_id(params[:id])
+    if @article
+      other = @article.merge_with(params[:merge_with])
+      redirect_to :action => 'edit', :id => @article.id
+      if other
+        flash[:notice] = 'Current article successfully merged with article id ' + params[:merge_with].to_s
+      else
+        flash[:error] = 'Could not merge current article with article id ' + params[:merge_with].to_s
+      end
     else
-      flash[:error] = 'Could not merge current article with article id ' + params[:merge_with]
+      flash[:error] = 'Could not find article with id ' + params[:id].to_s
+      redirect_to :action => 'index'
     end
-
   end
 
 
