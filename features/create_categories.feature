@@ -9,8 +9,8 @@ Feature: As an admin I want create a category
 
   Scenario: Add a new category
     Given I am on the new category page
-    And I fill in "name" with "Name"
-    And I fill in "keywords" with "Keyword"
-    And I fill in "description" with "Description"
+    And I fill in "category_name" with "Name"
+    And I fill in "category_keywords" with "Keyword"
+    And I fill in "category_description" with "Description"
     And I press "Save"
-    Then I should see "A new Category has been added"
+    Then I should see "Category was successfully saved"
