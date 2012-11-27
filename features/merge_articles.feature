@@ -16,7 +16,7 @@ Feature: As an admin I want to merge two articles
   Scenario: A non-admin cannot post a merge for two articles
     Given I am logged-in as non-admin user
     And I post a merge of the articles "user1_title" and "user2_title"
-    Then show me the page
+#    Then show me the page
     Then I should see "Error, you are not allowed to perform this action"
 
   Scenario: Admin can merge two blog articles

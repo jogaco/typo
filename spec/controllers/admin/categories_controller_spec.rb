@@ -16,6 +16,11 @@ describe Admin::CategoriesController do
     assert_response :redirect, :action => 'index'
   end
 
+  it "test new" do
+    get :new
+    assert_template 'new'
+  end
+
   describe "test_edit" do
     before(:each) do
       get :edit, :id => Factory(:category).id

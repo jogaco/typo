@@ -110,9 +110,9 @@ And /^I am logged-in as (non-)?admin user$/ do |non_admin|
 end
 
 And /^I post a merge of the articles "([^"]*)" and "([^"]*)"$/ do |art1, art2|
-  article_1 = Article.find_by_title(art1)
-  article_2 = Article.find_by_title(art2)
-  page.driver.post '/admin/content/merge/' + article_1.id.to_s { :merge_with => article_2.id } 
+  article_1 = Article.find_by_title!(art1)
+  article_2 = Article.find_by_title!(art2)
+  post '/admin/content/merge/' + article_1.id.to_s, { :merge_with => article_2.id } 
 end
 
 # Single-line step scoper

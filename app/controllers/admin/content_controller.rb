@@ -9,8 +9,8 @@ class Admin::ContentController < Admin::BaseController
 private
   def check_authorization
     unless current_user.admin?
-      redirect_to :action => 'index'
       flash[:error] = _("Error, you are not allowed to perform this action")
+      render :action => 'index'
       return
     end
   end

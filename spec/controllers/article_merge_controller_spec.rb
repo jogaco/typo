@@ -31,7 +31,9 @@ describe Admin::ContentController do
       article_dest.should_not_receive(:merge_with)
       Article.stub!(:find_by_id).and_return(article_dest)
       post 'merge', { :id => 1, :merge_with => 2 }
-      assert_response :redirect, :action => 'index'
+      response.should render_template('index')
+      response.should have_content('Error, you are not allowed to perform this action')
+#      response.should render_template('index')
     end
 
   end

@@ -17,7 +17,8 @@ module NavigationHelpers
       '/'
     when /^the new article page$/
       '/admin/content/new'
-
+    when /^new category page$/
+      '/admin/categories/new'
     when /^the edit page of the article "([^"]*)"$/ then
       begin
         article = Article.find_by_title($1)
