@@ -10,7 +10,7 @@ private
   def check_authorization
     unless current_user.admin?
       flash[:error] = _("Error, you are not allowed to perform this action")
-      render :action => 'index'
+      redirect_to :action => 'index'
       return
     end
   end
